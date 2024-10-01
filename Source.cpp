@@ -11,19 +11,19 @@ private:
 
 public:
 
-	Array ()
+	Array()
 	{
 		arr = new T[1];
 		currentSize = 0;
 		memorySize = 1;
 	}
 
-	~Array ()
+	~Array()
 	{
 		delete[] arr;
 	}
 
-	void push_back (T data)
+	void push_back(T data)
 	{
 		if (currentSize == memorySize)
 		{
@@ -40,7 +40,7 @@ public:
 		currentSize++;
 	}
 
-	void push_back (T data, int position)
+	void push_back(T data, int position)
 	{
 		if (position == currentSize)
 		{
@@ -53,38 +53,59 @@ public:
 
 	T& operator[] (int index)
 	{
-		if (index < currentSize)
-		{
-			return arr[index];
-		}
-		else
-		{
-			throw "Wrong index!";
-		}
 		
+		if (index < 0 || index >= currentSize)
+		{
+			static T emptyValue;
+			cerr << "Index out of range! Returned an empty value";
+			return emptyValue;
+		}
+		return arr[index];
 	}
 
-	void pop ()
+	int getSize()
+	{
+		return currentSize;
+	}
+
+	void pop()
 	{
 		currentSize--;
 	}
 
-	void del (int index)
+	void del(int index)
 	{
-		if (index == currentSize - 1)
+		if (index < 0 || index >= currentSize)
+		{
+			
+			cerr << "Index out of range!" << endl;
+			return;
+		}
+		if (index == (currentSize - 1))
 		{
 			pop();
 		}
 		else
 		{
-			for (int i = index + 1; i < currentSize; i++)
-			{
-				push_back(arr[i], index);
+			T* temp = new T[currentSize - 1];
+			for (int i = 0,j = 0; i < currentSize; i++, j++)
+			{	
+				if (i != index)
+				{
+					temp[j] = arr[i];
+				}
+				else
+				{
+					j = i - 1;
+					continue;
+				}
 			}
+			delete[] arr;
+			arr = temp;
+			currentSize--;
+			memorySize--;
 		}
 	}
-
-
 
 	void print()
 	{
@@ -101,15 +122,7 @@ public:
 int main()
 {
 	Array<string> myVector;
-	Array<string> VECTORVECTOR;
-	myVector.push_back("1");
-	myVector.push_back("2");
-	myVector.push_back("3");
-	myVector.print();
-	myVector.push_back("3",0);
-	myVector.del(3);
-	myVector.print();
-	cout << myVector[0];
+	
 
 	
 
