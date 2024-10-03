@@ -155,6 +155,7 @@ private:
 public:
 
 	ForwardList(std::string value);
+	~ForwardList();
 	bool isEmpty();
 	int Size();
 	void AddToEnd(std::string value);
@@ -171,6 +172,19 @@ ForwardList::ForwardList(std::string value)
 	NodeFL* startNode = new NodeFL{ value, nullptr };
 	head = startNode;
 	tail = startNode;
+}
+
+ForwardList::~ForwardList()
+{
+	NodeFL* currentNode = head;
+	while (currentNode)
+	{
+		NodeFL* curNext = currentNode->next;
+		delete currentNode;
+		currentNode = curNext;
+	}
+	head = nullptr;
+	tail = nullptr;
 }
 
 bool ForwardList::isEmpty()

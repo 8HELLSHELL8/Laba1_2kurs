@@ -16,6 +16,14 @@ private:
 	NodeLL* head;
 public:
 
+	LinkedList(string value)
+	{
+		NodeLL* startNode = new NodeLL{ value, nullptr, nullptr };
+		head = startNode;
+		tail = startNode;
+		
+	}
+
 };
 
 
