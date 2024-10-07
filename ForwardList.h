@@ -1,12 +1,13 @@
 #pragma once
 
-
+template<typename T>
 struct NodeFL
 {
-	std::string value;
+	T value;
 	NodeFL* next;
 };
 
+template<typename T>
 struct ForwardList
 {
 private:
@@ -16,7 +17,7 @@ private:
 
 public:
 
-	ForwardList(std::string value)
+	ForwardList(T value)
 	{
 		NodeFL* startNode = new NodeFL{ value, nullptr };
 		head = startNode;
@@ -63,14 +64,14 @@ public:
 		return sizeCounter;
 	}
 
-	void AddToEnd(std::string value)
+	void AddToEnd(T value)
 	{
 		NodeFL* newNode = new NodeFL{ value, nullptr };
 		tail->next = newNode;
 		tail = newNode;
 	}
 
-	void AddToStart(std::string value)
+	void AddToStart(T value)
 	{
 		NodeFL* newNode = new NodeFL{ value, head };
 		head = newNode;
@@ -112,7 +113,7 @@ public:
 		delete temp;
 	}
 
-	void DeleteByValue(std::string value)
+	void DeleteByValue(T value)
 	{
 		if (isEmpty()) return;
 		if (head->value == value)
@@ -147,7 +148,7 @@ public:
 		}
 	}
 
-	NodeFL* Find(std::string value)
+	NodeFL* Find(T value)
 	{
 		NodeFL* current = head;
 		while (current)

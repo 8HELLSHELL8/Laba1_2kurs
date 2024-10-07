@@ -142,3 +142,83 @@ public:
 	}
 
 };
+
+
+
+struct node
+{
+	int32_t key;
+	node* previous;
+	node* leftChild;
+	node* rightChild;
+	node(int value)
+	{
+		this->key = value;
+		previous = nullptr;
+		leftChild = nullptr;
+		rightChild = nullptr;
+	}
+};
+
+struct FBT
+{
+private:
+	node* root;
+	Queue<node*> waitlist;
+	Queue<node*> allNodes;
+public:
+	FBT(int32_t value)
+	{
+		root = new node(value);
+		allNodes.Enqueue(root);
+		waitlist.Enqueue(root);
+	}
+
+	void Add(int32_t value)
+	{
+		node* parent = waitlist.Front(); // Ѕерем узел, который находитс€ в очереди
+
+		node* newNode = new node{ value };
+		allNodes.Enqueue(newNode);
+
+		// ѕровер€ем, куда добавить новый узел
+		if (parent->leftChild == nullptr) parent->leftChild = newNode;
+		else if (parent->rightChild == nullptr)
+		{
+			parent->rightChild = newNode;
+			waitlist.Dequeue(); // ≈сли у узла есть оба ребенка, удал€ем его из очереди
+		}
+
+		waitlist.Enqueue(newNode);
+	}
+
+	void PrintNodes()
+	{
+		for (size_t i = 0; i < allNodes.GetSize(); i++) std::cout << allNodes[i]->key << " ";
+		std::cout << std::endl;
+	}
+
+	node* findPlace(int value)
+	{
+		for (size_t i = 0; i < allNodes.GetSize(); i++)
+		{
+			if (allNodes[i]->key == value)
+			{
+				return allNodes[i];
+			}
+		}
+		std::cout << "Value does not exists!" << std::endl;
+		return nullptr;
+	}
+
+	bool isFull()
+	{
+		for (size_t i = 0; i < allNodes.GetSize(); i++)
+		{
+			if (allNodes[i]->leftChild == nullptr && allNodes[i]->rightChild != nullptr ||
+				allNodes[i]->leftChild != nullptr && allNodes[i]->rightChild == nullptr) return false;
+
+		}
+		return true;
+	}
+};
