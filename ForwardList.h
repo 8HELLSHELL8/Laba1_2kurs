@@ -1,4 +1,6 @@
 #pragma once
+#include <fstream>
+#include <iostream>
 
 template<typename T>
 struct NodeFL
@@ -12,14 +14,14 @@ struct ForwardList
 {
 private:
 
-	NodeFL* head;
-	NodeFL* tail;
+	NodeFL<T>* head;
+	NodeFL<T>* tail;
 
 public:
 
 	ForwardList(T value)
 	{
-		NodeFL* startNode = new NodeFL{ value, nullptr };
+		NodeFL<T>* startNode = new NodeFL<T>{ value, nullptr };
 		head = startNode;
 		tail = startNode;
 	}
@@ -33,10 +35,10 @@ public:
 			tail = nullptr;
 		}
 		else {
-			NodeFL* currentNode = head;
+			NodeFL<T>* currentNode = head;
 			while (currentNode)
 			{
-				NodeFL* curNext = currentNode->next;
+				NodeFL<T>* curNext = currentNode->next;
 				delete currentNode;
 				currentNode = curNext;
 			}
@@ -54,7 +56,7 @@ public:
 	{
 		if (isEmpty()) return -1;
 		int sizeCounter = 0;
-		NodeFL* currentNode = head;
+		NodeFL<T>* currentNode = head;
 		while (currentNode)
 		{
 			sizeCounter++;
@@ -64,16 +66,22 @@ public:
 		return sizeCounter;
 	}
 
-	void AddToEnd(T value)
+	void push_back(T value)
 	{
-		NodeFL* newNode = new NodeFL{ value, nullptr };
+		NodeFL<T>* newNode = new NodeFL<T>{ value, nullptr };
 		tail->next = newNode;
 		tail = newNode;
 	}
 
+	void push_back(T value, int index)
+	{
+		if (index == 0) AddToStart(value);
+		else if (index == Size() - 1) push_back(value);
+	}
+
 	void AddToStart(T value)
 	{
-		NodeFL* newNode = new NodeFL{ value, head };
+		NodeFL<T>* newNode = new NodeFL<T>{ value, head };
 		head = newNode;
 	}
 
@@ -88,7 +96,7 @@ public:
 		}
 		else
 		{
-			NodeFL* current = head;
+			NodeFL<T>* current = head;
 			while (current->next != tail)
 			{
 				current = current->next;
@@ -108,7 +116,7 @@ public:
 			head = nullptr;
 			tail = nullptr;
 		}
-		NodeFL* temp = head;
+		NodeFL<T>* temp = head;
 		head = head->next;
 		delete temp;
 	}
@@ -118,7 +126,7 @@ public:
 		if (isEmpty()) return;
 		if (head->value == value)
 		{
-			NodeFL* temp = head;
+			NodeFL<T>* temp = head;
 			head = head->next;
 			delete temp;
 
@@ -128,8 +136,8 @@ public:
 			return;
 		}
 
-		NodeFL* prev = head;
-		NodeFL* current = head->next;
+		NodeFL<T>* prev = head;
+		NodeFL<T>* current = head->next;
 
 		while (current != nullptr)
 		{
@@ -148,9 +156,21 @@ public:
 		}
 	}
 
-	NodeFL* Find(T value)
+	void Pop()
 	{
-		NodeFL* current = head;
+		DeleteLast();
+	}
+
+	void Pop(int index)
+	{
+		if (index == Size() - 1) DeleteLast();
+		else if (index == 0) DeleteFirst();
+
+	}
+
+	NodeFL<T>* Find(T value)
+	{
+		NodeFL<T>* current = head;
 		while (current)
 		{
 			if (current->value == value)
@@ -165,7 +185,7 @@ public:
 	void Print()
 	{
 		if (isEmpty()) std::cout << "Container is empty!" << std::endl;
-		NodeFL* printNode = head;
+		NodeFL<T>* printNode = head;
 		if (Size() == 1)
 		{
 			std::cout << head->value << std::endl;
@@ -178,6 +198,25 @@ public:
 				printNode = printNode->next;
 			}
 			std::cout << std::endl;
+		}
+	}
+
+	void PrintInFile(std::fstream& file)
+	{
+		if (isEmpty()) file << "Container is empty!" << std::endl;
+		NodeFL<T>* printNode = head;
+		if (Size() == 1)
+		{
+			file << head->value << std::endl;
+		}
+		else
+		{
+			while (printNode)
+			{
+				file << printNode->value << " ";
+				printNode = printNode->next;
+			}
+			file << std::endl;
 		}
 	}
 };

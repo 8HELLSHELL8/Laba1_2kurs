@@ -1,28 +1,31 @@
 #pragma once
+#include <cmath>
+#include <iostream>
+#include <fstream>
 
 template<typename T>
-struct NodeQU
+struct NodeQUT
 {
 	T value;
-	NodeQU<T>* nextNode;
+	NodeQUT<T>* nextNode;
 };
 
 template<typename T>
-struct Queue
+struct QueueT
 {
 private:
-	NodeQU<T>* head;
-	NodeQU<T>* tail;
+	NodeQUT<T>* head;
+	NodeQUT<T>* tail;
 public:
-	Queue() : head(nullptr), tail(nullptr) {}
+	QueueT() : head(nullptr), tail(nullptr) {}
 
-	~Queue()
+	~QueueT()
 	{
-		NodeQU<T>* currentNode = head;
+		NodeQUT<T>* currentNode = head;
 		while (currentNode)
 		{
-			NodeQU<T>* curNext = currentNode->nextNode;
-			delete currentNode;
+			NodeQUT<T>* curNext = currentNode->nextNode;
+			//delete currentNode;
 			currentNode = curNext;
 		}
 		head = nullptr;
@@ -36,7 +39,7 @@ public:
 
 	int GetSize()
 	{
-		NodeQU<T>* currentNode = head;
+		NodeQUT<T>* currentNode = head;
 		int size = 0;
 		while (currentNode)
 		{
@@ -48,7 +51,7 @@ public:
 
 	void Enqueue(T value)
 	{
-		NodeQU<T>* newNode = new NodeQU<T>{ value, nullptr };
+		NodeQUT<T>* newNode = new NodeQUT<T>{ value, nullptr };
 		if (isEmpty())
 		{
 			head = newNode;
@@ -65,7 +68,7 @@ public:
 	{
 		if (isEmpty()) return;
 
-		NodeQU<T>* newHead = head->nextNode;
+		NodeQUT<T>* newHead = head->nextNode;
 		delete head;
 		head = newHead;
 
@@ -86,7 +89,7 @@ public:
 
 	void Print()
 	{
-		NodeQU<T>* currentNode = head;
+		NodeQUT<T>* currentNode = head;
 		while (currentNode)
 		{
 			std::cout << currentNode->value << " ";
@@ -102,7 +105,7 @@ public:
 			throw std::out_of_range("Index is out of range!");
 		}
 
-		NodeQU<T>* currentNode = head;
+		NodeQUT<T>* currentNode = head;
 		int currentIndex = 0;
 
 		while (currentNode)
@@ -125,7 +128,7 @@ public:
 			throw std::out_of_range("Index is out of range!");
 		}
 
-		NodeQU<T>* currentNode = head;
+		NodeQUT<T>* currentNode = head;
 		int currentIndex = 0;
 
 		while (currentNode)
@@ -164,8 +167,8 @@ struct FBT
 {
 private:
 	node* root;
-	Queue<node*> waitlist;
-	Queue<node*> allNodes;
+	QueueT<node*> waitlist;
+	QueueT<node*> allNodes;
 public:
 	FBT(int32_t value)
 	{
@@ -197,6 +200,65 @@ public:
 		for (size_t i = 0; i < allNodes.GetSize(); i++) std::cout << allNodes[i]->key << " ";
 		std::cout << std::endl;
 	}
+
+	void PrintTree()
+	{
+		int totalNodes = allNodes.GetSize();  // Общее количество узлов в дереве
+		int level = 0;                        // Текущий уровень дерева
+		int printedNodes = 0;                 // Количество уже напечатанных узлов
+		int maxNodesAtLevel = std::pow(2, std::floor(std::log2(totalNodes)) + 1);
+		// Печатаем дерево по уровням
+		while (printedNodes < totalNodes)
+		{
+			// Количество узлов на текущем уровне — 2^level
+			int nodesInLevel = pow(2, level);
+			level++;  // Переходим к следующему уровню
+
+			int leadingSpaces = maxNodesAtLevel / nodesInLevel - 1;
+			int spacingBetweenNodes = maxNodesAtLevel / nodesInLevel - 1;
+			std::string leadSep(leadingSpaces + 3, ' ');
+			std::string endSep(spacingBetweenNodes, ' ');
+			// Печатаем узлы текущего уровня
+			for (int i = 0; i < nodesInLevel && printedNodes < totalNodes; i++)
+			{
+
+				std::cout << leadSep << allNodes[printedNodes]->key << endSep;
+				printedNodes++;
+			}
+
+			std::cout << std::endl;  // Переход на новый уровень
+		}
+	}
+
+	void PrintInFile(std::fstream& file)
+	{
+		int totalNodes = allNodes.GetSize();  // Общее количество узлов в дереве
+		int level = 0;                        // Текущий уровень дерева
+		int printedNodes = 0;                 // Количество уже напечатанных узлов
+		int maxNodesAtLevel = std::pow(2, std::floor(std::log2(totalNodes)) + 1);
+		// Печатаем дерево по уровням
+		while (printedNodes < totalNodes)
+		{
+			// Количество узлов на текущем уровне — 2^level
+			int nodesInLevel = pow(2, level);
+			level++;  // Переходим к следующему уровню
+
+			int leadingSpaces = maxNodesAtLevel / nodesInLevel - 1;
+			int spacingBetweenNodes = maxNodesAtLevel / nodesInLevel - 1;
+			std::string leadSep(leadingSpaces + 3, ' ');
+			std::string endSep(spacingBetweenNodes, ' ');
+			// Печатаем узлы текущего уровня
+			for (int i = 0; i < nodesInLevel && printedNodes < totalNodes; i++)
+			{
+
+				file << leadSep << allNodes[printedNodes]->key << endSep;
+				printedNodes++;
+			}
+
+			file << std::endl;  // Переход на новый уровень
+		}
+	}
+
 
 	node* findPlace(int value)
 	{

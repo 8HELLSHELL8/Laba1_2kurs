@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+#include <fstream>
 
 struct NodeLL
 {
@@ -76,6 +78,20 @@ public:
 		head = newNode;
 	}
 
+
+	void push_back(std::string value)
+	{
+		AddToEnd(value);
+	}
+
+	void push_back(std::string value, int index)
+	{
+		if (index == GetSize() - 1) AddToEnd(value);
+		else if (index == 0) AddToStart(value);
+		else std::cout << "Wrong index" << std::endl;
+
+	}
+
 	void DeleteLast()
 	{
 		if (isEmpty()) return;
@@ -146,6 +162,17 @@ public:
 
 	}
 
+	void Pop()
+	{
+		DeleteLast();
+	}
+	void Pop(int index)
+	{
+		if (index == GetSize() - 1) DeleteLast();
+		else if (index == 0) DeleteFirst();
+		else std::cout << "Wrong index!" << std::endl;
+	}
+
 	NodeLL* Find(std::string value)
 	{
 		NodeLL* currentNode = head;
@@ -170,4 +197,16 @@ public:
 		}
 		std::cout << std::endl;
 	}
+
+	void PrintInFile(std::fstream& file)
+	{
+		NodeLL* currentNode = head;
+		while (currentNode)
+		{
+			file << currentNode->value << " ";
+			currentNode = currentNode->nextNode;
+		}
+		file << std::endl;
+	}
+
 };

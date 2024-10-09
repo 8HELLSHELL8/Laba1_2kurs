@@ -128,18 +128,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="HashTable.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdcpp20</LanguageStandard>
     </ClCompile>
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Array.h" />
-    <ClInclude Include="FBT.h" />
+    <ClInclude Include="TreeFULL.h" />
     <ClInclude Include="ForwardList.h" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="Queue.h" />
     <ClInclude Include="LinkedList.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="file.data.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

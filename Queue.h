@@ -1,5 +1,8 @@
 #pragma once
 
+#include <fstream>
+#include <iostream>
+
 template<typename T>
 struct NodeQU
 {
@@ -139,6 +142,17 @@ public:
 		}
 
 		throw std::out_of_range("Index is out of range!"); // На случай ошибки
+	}
+
+	void PrintInFile(std::fstream& file)
+	{
+		NodeQU<T>* currentNode = head;
+		while (currentNode)
+		{
+			file << currentNode->value << " ";
+			currentNode = currentNode->nextNode;
+		}
+		file << std::endl;
 	}
 
 };

@@ -1,5 +1,8 @@
 #pragma once
 
+#include <iostream>
+#include <fstream>
+
 template<typename T>
 struct Stack
 {
@@ -72,6 +75,21 @@ public:
 			std::cout << array[i] << " ";
 		}
 		std::cout << std::endl;
+	}
+
+	void PrintInFile(std::fstream& file)
+	{
+		if (isEmpty())
+		{
+			file << "Empty container!" << std::endl;
+			return;
+		}
+
+		for (int i = 0; i < currentSize; i++)
+		{
+			file << array[i] << " ";
+		}
+		file << std::endl;
 	}
 
 	T& operator[] (int index)

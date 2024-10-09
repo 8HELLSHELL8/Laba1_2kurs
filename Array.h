@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <stdexcept>
+#include <fstream>
 #include <type_traits>
 
 template<typename T>
@@ -12,7 +13,7 @@ private:
     int memorySize;
 
 public:
-    
+
     Array()
     {
         static_assert(std::is_default_constructible<T>::value, "Type T must be default constructible");
@@ -81,7 +82,7 @@ public:
         currentSize--; // Уменьшаем только размер массива
     }
 
-    void del(int index)
+    void pop(int index)
     {
         if (index < 0 || index >= currentSize)
         {
@@ -108,6 +109,25 @@ public:
         }
     }
 
+    void get(T value)
+    {
+        if (currentSize == 0)
+        {
+            std::cout << "Empty container!" << std::endl;
+            return;
+        }
+        for (int i = 0; i < currentSize; i++)
+        {
+            if (arr[i] == value)
+            {
+                std::cout << "Index in array is: " << arr[i] << std::endl;
+                return;
+            }
+        }
+        std::cout << "Element is not in array!" << std::endl;
+        return;
+    }
+
     void print()
     {
         if (currentSize == 0)
@@ -120,6 +140,20 @@ public:
             std::cout << arr[i] << " ";
         }
         std::cout << std::endl;
+    }
+
+    void printInFile(std::fstream& file)
+    {
+        if (currentSize == 0)
+        {
+            file << "Empty container!" << std::endl;
+            return;
+        }
+        for (int i = 0; i < currentSize; i++)
+        {
+            file << arr[i] << " ";
+        }
+        file << std::endl;
     }
 };
 
